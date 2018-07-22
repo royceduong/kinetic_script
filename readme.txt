@@ -41,12 +41,19 @@ Create a script/algorithm
 					What are the best practices for something like this?
 		
 
-			Read copy media function
-				I have no idea what the fuck is going on in here
-				-New folders are manipulated. Folder title has been pre-pended with the color
-				-Limited amount of "Products" to copy over, need more
-				-Products folder has:
-					(1) illustrator file
-					(1) xlsx file. This has order information, which we already created and a picture of the jersey as well.
-				Questions
-					What is the end result supposed to be?
+			Copy Media Function
+				Copy media will be implemented when the new order folder is created.
+				copy_media(color, product_title):
+					chdir(asset_folder)
+					if we find a "Color" folder:
+						for x in <Color Folder>:
+							if color == x:
+								chdir(color)
+									for each file in folder:
+										shutil.copy(current file, copy_file)
+					else:
+						Loop for product_title matches
+							if product_title == product_title:
+								chdir(product_title)
+								for each file in folder:
+									shutil.copy(current_file, copy_file)
