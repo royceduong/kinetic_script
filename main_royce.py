@@ -69,26 +69,25 @@ def create_folders():
 	
 	# Reset to root directory
 	os.chdir(ordersDir)
-	#Create subfolders
-	# create_subfolders(values,colors)
 	sort_manufacturer(values)
 
-def find_color(variant_col,title):
-	splt = variant_col.split('/ ')
+def create_subfolders(variant,title,order_info):
+	splt = variant.split('/ ')
 	if len(splt) > 1:
 		clean_color = splt[1].strip()
 		new_title = clean_color + ' - ' + title
 		order_file = new_title + '.csv'
 		if os.path.exists(new_title) or os.path.exists(order_file):
-			add_to_file(new_title, order_file, orderinfo)
+			add_to_file(new_title, order_file, order_info)
 		if not os.path.exists(new_title) and not os.path.exists(order_file):
-			create_new_folder_and_file(new_title, order_file, orderinfo)	
+			create_new_folder_and_file(new_title, order_file, order_info)	
+			print('created: ' + new_title)
 	else:
 		order_file = title + '.csv'		
 		if os.path.exists(title) or os.path.exists(order_file):
-			add_to_file(title, order_file, orderinfo)
+			add_to_file(title, order_file, order_info)
 		if not os.path.exists(title) and not os.path.exists(order_file):
-			create_new_folder_and_file(title, order_file, orderinfo)
+			create_new_folder_and_file(title, order_file, order_info)
 
 #git push, so i don't fuck this up.
 #test to see if it works
@@ -99,93 +98,36 @@ def sort_manufacturer(values):
 	root_dir = os.getcwd()
 	for v in values:
 		count += 1
-		print(count)
-		orderfile = str(v[2]+'.csv')				
-		orderinfo = [v[4],v[5],v[6],v[8]]				# orderinfo = ['Order Number', 'Name', 'Number', 'Size']
-		variant = str(v[9]).replace('/','-')
+		orderfile = str(v[2]+'.csv')	
+		# orderinfo = ['Order Number', 'Name', 'Number', 'Size']			
+		orderinfo = [v[4],v[5],v[6],v[8]]
 		title = v[2]	
-		variant_col = v[9]
+		variant = v[9]
 		if 'Hockey' in title or 'Baseball' in title or 'Soccer' in title:
 			os.chdir('China')
 			if 'Fully Stitched' in variant:
 				os.chdir('fully_stitched')
-				if v[9]:
-					splt = v[9].split('/ ')
-					if len(splt) > 1:
-						clean_color = splt[1].strip()
-						new_title = clean_color + ' - ' + title
-						order_file = new_title + '.csv'
-						if os.path.exists(new_title) or os.path.exists(order_file):
-							add_to_file(new_title, order_file, orderinfo)
-						if not os.path.exists(new_title) and not os.path.exists(order_file):
-							create_new_folder_and_file(new_title, order_file, orderinfo)	
-					else:
-						order_file = title + '.csv'		
-						if os.path.exists(title) or os.path.exists(order_file):
-							add_to_file(title, order_file, orderinfo)
-						if not os.path.exists(title) and not os.path.exists(order_file):
-							create_new_folder_and_file(title, order_file, orderinfo)
+				if variant:
+					create_subfolders(variant,title,orderinfo)
 				# else:
-				# 	errors.append('Error on Order Number ' + v[15] + ': Variant not detected')					
+				# Add to error report
 			elif 'Sublimation Print' in variant:
 				os.chdir('sublimated')
 				if v[9]:
-					splt = v[9].split('/ ')
-					if len(splt) > 1:
-						cleaned_color_str = splt[1].strip()
-						new_title = cleaned_color_str + ' - ' + title
-						order_file = new_title + '.csv'
-						if os.path.exists(order_file) or os.path.exists(new_title):
-							add_to_file(new_title, order_file, orderinfo)
-						if not os.path.exists(order_file) and not os.path.exists(new_title):
-							create_new_folder_and_file(new_title, order_file, orderinfo)
-					else:
-						order_file = title + '.csv'		
-						if os.path.exists(title) or os.path.exists(order_file):
-							add_to_file(title, order_file, orderinfo)
-						if not os.path.exists(title) and not os.path.exists(order_file):
-							create_new_folder_and_file(title, order_file, orderinfo)
+					create_subfolders(variant,title,orderinfo)
 			# else:
-			# 	errors.append('Error on Order Number ' + v[15] + ': Print type is not listed')
+			# Add to error report
 		elif 'Basketball' in title:
 			if 'Sublimation Print' in variant:
 				os.chdir('China')
 				os.chdir('sublimated')
 				if v[9]:
-					splt = v[9].split('/ ')
-					if len(splt) > 1:
-						cleaned_color_str = splt[1].strip()
-						new_title = cleaned_color_str + ' - ' + title
-						order_file = new_title + '.csv'
-						if os.path.exists(order_file) or os.path.exists(new_title):
-							add_to_file(new_title, order_file, orderinfo)
-						if not os.path.exists(order_file) and not os.path.exists(new_title):
-							create_new_folder_and_file(new_title, order_file, orderinfo)
-					else:
-						order_file = title + '.csv'		
-						if os.path.exists(title) or os.path.exists(order_file):
-							add_to_file(title, order_file, orderinfo)
-						if not os.path.exists(title) and not os.path.exists(order_file):
-							create_new_folder_and_file(title, order_file, orderinfo)
+					create_subfolders(variant,title,orderinfo)
 			elif 'Fully Stitched' in variant:
 				os.chdir('Pakistan')
 				os.chdir('fully_stitched')
 				if v[9]:
-					splt = v[9].split('/ ')
-					if len(splt) > 1:
-						cleaned_color_str = splt[1].strip()
-						new_title = cleaned_color_str + ' - ' + title
-						order_file = new_title + '.csv'
-						if os.path.exists(order_file) or os.path.exists(new_title):
-							add_to_file(new_title, order_file, orderinfo)
-						if not os.path.exists(order_file) and not os.path.exists(new_title):
-							create_new_folder_and_file(new_title, order_file, orderinfo)
-					else:
-						order_file = title + '.csv'		
-						if os.path.exists(title) or os.path.exists(order_file):
-							add_to_file(title, order_file, orderinfo)
-						if not os.path.exists(title) and not os.path.exists(order_file):
-							create_new_folder_and_file(title, order_file, orderinfo)
+					create_subfolders(variant,title,orderinfo)
 			else:
 				errors.append('Error on Order Number ' + v[15] + ': Print type is not listed')
 		else:

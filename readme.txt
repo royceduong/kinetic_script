@@ -30,7 +30,7 @@ Create a script/algorithm
 			create error report
 				make every "else" conditional append an error report
 
-				Create csv file
+				Create csv file (save the path so it can be accessed globally)
 				array is full of errors
 				iterate through array to insert errors
 
@@ -38,6 +38,8 @@ Create a script/algorithm
 					Does not meet conditionals
 						No Jersey Type in Product title
 						No fully stitched or sublimation in variant
+					If Subfolders are removed, def create_folders does not catch. Code will break.
+						ie. Removed fully stitched from China. It will break.
 					What are the best practices for something like this?
 		
 
