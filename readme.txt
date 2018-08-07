@@ -1,3 +1,6 @@
+This project is for Kinetic Society, a custom athletic apparel company based in Los Angeles, CA.
+This script will automate the creation of digital assets for their manufactueres in China and Pakistan.
+
 
 Create a script/algorithm
     -Takes data from Excel Document and creates folders/file structures ready for manufacturers
@@ -43,7 +46,7 @@ Create a script/algorithm
 					What are the best practices for something like this?
 		
 
-			Copy Media Function
+			Copy Media Function (DONE)
 				Copy media will be implemented when the new order folder is created.
 				copy_media(color, product_title):
 					chdir(asset_folder)
@@ -59,3 +62,31 @@ Create a script/algorithm
 								chdir(product_title)
 								for each file in folder:
 									shutil.copy(current_file, copy_file)
+
+
+Work Day Tues. August 7 7:30am.
+Tasks
+Write Copy_Media Function
+	1. find the path to asset library
+	2. rework the color conditional. 
+
+
+
+create a test spreadsheet (DONE) => properly tests copy functionality against naming conventions
+	Identify jerseys that have color subfolders.
+		aKDPHI - Standard Issue Baseball Jersey
+		Chi Phi - House Basketball Jersey
+		Kappa Sigma - Standard Issue Baseball Jersey
+		Kinetic ID - LA Skyline Baseball Jersey
+		
+	Identify jersesys that DO NOT have color subfolders.
+
+	Buggy folders
+		In Test Sheet
+		KAPPA SIGMA - SOUTH BEACH Basketball JERSEY (will lowercase Basketball create issues?)
+			YES. Yes, it does create issues. Extra credit to normalize all text.. but probably easier to just control the naming conventions
+		
+		Not in Test Sheet 
+		ALPHA EPSILON PHI - SOUTH BEACH BASKETBALL JERSEY (has empty subfolder inside with another jersey name)
+			It does not become an issue as folder traversal into color folder only happens upon positive matches.
+		

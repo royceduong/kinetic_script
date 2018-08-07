@@ -37,9 +37,6 @@ def create_folders():
 	# SPREADSHEET_ID = '1xNN28kbO9WpPSCW-FABLr8mT6f11kjVsbszAizil0d8'
 	# Kinetic_Test_2
 	SPREADSHEET_ID = '1e35U28DUeZJo5v2E16ICaq03AhojMjoBG1ZL9zRBN7Q'
-
-	
-	#Running from row 681 and below
 	RANGE_ID = 'A2:P' 
 	result = service.spreadsheets().values().get(
 	    spreadsheetId=SPREADSHEET_ID, range=RANGE_ID).execute()
@@ -47,6 +44,8 @@ def create_folders():
 
 	#Create Folder Structures
 	cwd = os.getcwd()
+	# print(cwd)
+	# print(os.listdir())
 	if not os.path.exists('Orders'):
 	    os.makedirs('Orders')
 	os.chdir('Orders')
@@ -71,8 +70,52 @@ def create_folders():
 	os.chdir(ordersDir)
 	sort_manufacturer(values)
 
+def copy_media(old_title,new_title, asset_list, color = None):
+	#what arguments do I need?
+	# color(optional argument), product_title, path of master asset folder, name of new folder(color prepend)
+	# pseudo code.
+	cwd = os.getcwd()
+	os.chdir('/Users/royceduong/Desktop/Clients/Kinetic_Society/kinetic_script/asset_library')
+	if old_title in asset_list:
+		os.chdir(old_title)
+		if color in os.listdir():
+			for root, dirs, files in os.walk(color):
+				for item in files:
+					path_file = os.path.join(root,item)
+					shutil.copy2(path_file,cwd)
+		else:
+			print(os.listdir())
+			for root, dirs, files in os.walk(os.getcwd()):
+				for item in files:
+					path_file = os.path.join(root,item)
+					shutil.copy2(path_file,cwd)
+	os.chdir(cwd)
+	# chdir into asset_folder
+	# find folder using old title
+	# 	if folder has colors inside:
+	# 		compare the color
+	# 			chdir into color
+	# 				copy everything inside of it. (shutil)
+	# 	else:
+	# 		copy everything inside (shutil)
+	# print(os.getcwd())
+	# print('copying' + old_title)
+	# os.chdir(asset_folder_path)
+	# folders = ls.dir
+	# if old_title in folders:
+	# 	print("we found the folder)")
+	# else
+	# 	print("folder not found")
+	
+
 def create_subfolders(variant,title,order_info):
 	splt = variant.split('/ ')
+	# TESTING TO GET ALL FOLDERS IN An ARRAY
+	cwd = os.getcwd()
+	os.chdir('/Users/royceduong/Desktop/Clients/Kinetic_Society/kinetic_script/asset_library')
+	asset_list = os.listdir()
+	os.chdir(cwd)
+
 	if len(splt) > 1:
 		clean_color = splt[1].strip()
 		new_title = clean_color + ' - ' + title
@@ -80,7 +123,9 @@ def create_subfolders(variant,title,order_info):
 		if os.path.exists(new_title) or os.path.exists(order_file):
 			add_to_file(new_title, order_file, order_info)
 		if not os.path.exists(new_title) and not os.path.exists(order_file):
-			create_new_folder_and_file(new_title, order_file, order_info)	
+			create_new_folder_and_file(new_title, order_file, order_info)
+			# print(os.getcwd())
+			copy_media(title, new_title, asset_list, clean_color)	
 			print('created: ' + new_title)
 	else:
 		order_file = title + '.csv'		
@@ -88,10 +133,8 @@ def create_subfolders(variant,title,order_info):
 			add_to_file(title, order_file, order_info)
 		if not os.path.exists(title) and not os.path.exists(order_file):
 			create_new_folder_and_file(title, order_file, order_info)
+			copy_media(title, title, asset_list)	
 
-#git push, so i don't fuck this up.
-#test to see if it works
-#change the variable names so that it is more readable.
 def sort_manufacturer(values):
 	errors = []
 	count = 0
@@ -113,7 +156,7 @@ def sort_manufacturer(values):
 				# Add to error report
 			elif 'Sublimation Print' in variant:
 				os.chdir('sublimated')
-				if v[9]:
+				if variant:
 					create_subfolders(variant,title,orderinfo)
 			# else:
 			# Add to error report
@@ -121,12 +164,12 @@ def sort_manufacturer(values):
 			if 'Sublimation Print' in variant:
 				os.chdir('China')
 				os.chdir('sublimated')
-				if v[9]:
+				if variant:
 					create_subfolders(variant,title,orderinfo)
 			elif 'Fully Stitched' in variant:
 				os.chdir('Pakistan')
 				os.chdir('fully_stitched')
-				if v[9]:
+				if variant:
 					create_subfolders(variant,title,orderinfo)
 			else:
 				errors.append('Error on Order Number ' + v[15] + ': Print type is not listed')
@@ -136,31 +179,31 @@ def sort_manufacturer(values):
 		os.chdir(root_dir)
 
 		
-def copy_media():
-	#Need to update logic for new folder names
-	#Get list of order folders
-	SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
-	store = file.Storage('credentials.json')
-	creds = store.get()
-	if not creds or creds.invalid:
-	    flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
-	    creds = tools.run_flow(flow, store)
-	service = build('sheets', 'v4', http=creds.authorize(Http()))
+# def copy_media():
+# 	#Need to update logic for new folder names
+# 	#Get list of order folders
+# 	SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
+# 	store = file.Storage('credentials.json')
+# 	creds = store.get()
+# 	if not creds or creds.invalid:
+# 	    flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
+# 	    creds = tools.run_flow(flow, store)
+# 	service = build('sheets', 'v4', http=creds.authorize(Http()))
 	
-	#Kinetic_Test_3
-	SPREADSHEET_ID = '1BtSn51XYCmZNm7HuQrDibNTiGcn4_sm5aEWU1YDlazo'
-	RANGE_ID = 'A2:P' 
-	result = service.spreadsheets().values().get(
-	    spreadsheetId=SPREADSHEET_ID, range=RANGE_ID).execute()
-	values = result.get('values', [])	
-	print(values)
+# 	#Kinetic_Test_3
+# 	SPREADSHEET_ID = '1BtSn51XYCmZNm7HuQrDibNTiGcn4_sm5aEWU1YDlazo'
+# 	RANGE_ID = 'A2:P' 
+# 	result = service.spreadsheets().values().get(
+# 	    spreadsheetId=SPREADSHEET_ID, range=RANGE_ID).execute()
+# 	values = result.get('values', [])	
+# 	print(values)
 	
-	cwd = os.getcwd()
-	order_directory = os.getcwd()
-	os.chdir('test_assets')
-	for x in os.listdir():
-		if x in products_list:
-			pass
+# 	cwd = os.getcwd()
+# 	order_directory = os.getcwd()
+# 	os.chdir('test_assets')
+# 	for x in os.listdir():
+# 		if x in products_list:
+# 			pass
 if __name__ == "__main__":
 	create_folders()
 	# copy_media()
